@@ -168,6 +168,15 @@ class BinarySearchTree{
         return visited;
     }
     
+    // Invert a BST
+    invertTree(current=this.root){
+        if(!current) return current;
+
+        let right = current.right;
+        current.right = this.invertTree(current.left);
+        current.left = this.invertTree(right);
+        return current;
+    }
 }
 
 
@@ -182,3 +191,6 @@ console.log(bst.search(27));
 console.log(bst.remove(35));
 console.log(bst.postOrder());
 console.log(bst.preOrder());
+
+bst.invertTree();
+console.log(bst.preOrder())
