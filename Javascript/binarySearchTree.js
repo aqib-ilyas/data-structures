@@ -70,38 +70,44 @@ class BinarySearchTree{
     // otherwise, deleted node will be replaced with minimum data node from it's right subtree
 
     remove(value){
-        if(this.root === null) return undefined;
-        
-        let current = this.root;
-        while(current){
-            if(value === current.value){
-                return this.root = this.deleteNode(current, value);
-            }
-            if(value < current.value){
-                current = current.left;
-            } else {
-                current = current.right;
-            }
-        }
-        return undefined;
+        return this.root = this.deleteNode(this.root, value);
     }
     
     deleteNode(current, value){
-        if(current.left === null && current.right === null) return null;
-        else if(current.left === null) return current = current.right;
-        else if(current.right === null) return current = current.left;
-        else{
-            let temp = this.smallestNode(current.right);
-            current.value = temp.value;
-            current.right = this.deleteNode(current.right, current.value);
+        /* Base Case: If the tree is empty */
+        if (current == null)
             return current;
+  
+        /* Otherwise, recur down the tree */
+        if (value < current.value)
+            current.left = this.deleteNode(current.left, value);
+        else if (value > current.value)
+            current.right = this.deleteNode(current.right, value);
+  
+        /* Delete node if value is equal to current node value */
+
+        else {
+            // node with only one child or no child
+            if (current.left == null)
+                return current.right;
+            else if (current.right == null)
+                return current.left;
+  
+            /* node with two children: Get the in-order
+               successor (smallest in the right subtree) */
+            current.value = this.smallestNode(current.right).value;
+  
+            // Delete the in-order successor
+            current.right = this.deleteNode(current.right, current.value);
         }
+  
+        return current;
     }
     
     /// helper function to find the smallest node
     
     smallestNode(node) {
-        while(!node.left === null)
+        while(node.left !== null)
             node = node.left
         return node
     }
@@ -181,14 +187,15 @@ class BinarySearchTree{
 
 
 // Creating a binary tree
-const input = [10, 7, 14, 20, 1, 5, 8];
+const input = [10, 7, 14, 20, 1, 5, 8, 13];
 let bst = new BinarySearchTree();
 for(let i = 0; i < input.length; i++){
     bst.insert(input[i]);
 }
 console.log(bst.inOrder());
 console.log(bst.search(27));
-console.log(bst.remove(35));
+console.log(bst.remove(20));
+console.log(bst.inOrder());
 console.log(bst.postOrder());
 console.log(bst.preOrder());
 
